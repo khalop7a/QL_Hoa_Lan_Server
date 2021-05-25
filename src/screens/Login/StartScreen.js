@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import {LogBox } from 'react-native';
 import {
     Background,
     Header,
@@ -8,6 +9,7 @@ import {
 } from '../../components';
 
 const StartScreen = ({ navigation }) => {
+    LogBox.ignoreLogs(['Reanimated 2']);
     return (
         <Background>
             <Logo />
@@ -18,6 +20,7 @@ const StartScreen = ({ navigation }) => {
             <Button
                 mode="contained"
                 onPress={() => navigation.navigate('LoginScreen')}
+                //onPress={ test }
             >
                 Login
             </Button>

@@ -9,10 +9,12 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
 } from './src/screens/Login';
+import { HomeStackScreen } from './src/screens/Home';
 
 const Stack = createStackNavigator()
 
 const App = () => {
+
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
@@ -29,6 +31,7 @@ const App = () => {
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}
           />
+          <Stack.Screen name="HomeStackScreen" component={HomeStackScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

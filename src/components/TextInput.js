@@ -4,6 +4,7 @@ import { TextInput as Input } from 'react-native-paper'
 import { theme } from '../core/theme';
 
 export default function TextInput({ errorText, description, ...props }) {
+  
   return (
     <View style={styles.container}>
       <Input
