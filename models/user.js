@@ -1,13 +1,9 @@
 class User{
-    constructor(uid, email, emailVerified, phoneNumber, password, displayName, photoURL, disabled){
+    constructor(uid, email, displayName, favourite){
         this.uid = uid;
-        this.email = email;
-        this.emailVerified = emailVerified;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
+        this.email = email; 
         this.displayName = displayName;
-        this.photoURL = photoURL;
-        this.disabled = disabled;
+        this.favourite = favourite;
     }
 }
 
