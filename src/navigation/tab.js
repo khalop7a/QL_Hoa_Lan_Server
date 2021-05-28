@@ -35,8 +35,8 @@ const Tabs = () => {
                 style: {
                     position: 'absolute',
                     bottom: 0,
-                    left: 10,
-                    right: 10,
+                    left: 0,
+                    right: 0,
                     elevation: 0,
                     backgroundColor: '#ffffff',
                     borderRadius: 15,
@@ -73,7 +73,7 @@ const Tabs = () => {
                                 tintColor: focused ? '#e32f45' : '#748c94'
                             }}
                         />
-                        <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize: 12}}>Tin tức</Text>
+                        <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize: 12}}>Thư viện</Text>
                     </View>
                 ),
             }}/>

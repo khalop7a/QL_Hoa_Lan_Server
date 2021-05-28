@@ -5,7 +5,6 @@ import {
     ActivityIndicator, 
     StyleSheet, 
     View, 
-    TextInput,
     SafeAreaView,
     Text,
 } from 'react-native';
@@ -16,21 +15,28 @@ class ImageComponent extends Component {
     constructor() {
       super();
     }
+
+    goToNextScreen = () => {
+      this.props.route.navigate('DetailScreen', this.props.data);
+    }
     render() {
       return (
-        <View style={styles.imageHolder}>
+        <TouchableOpacity 
+          style={styles.imageHolder}
+          onPress = {() => this.goToNextScreen()}
+        >
           <Image source={{ uri: this.props.imageURI }} style={styles.image} />
           <View style={styles.textViewHolder}>
             <Text numberOfLines={1} style={styles.textOnImage}>
               {this.props.name}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     }
 }
 
-const FeedScreen = () => {
+const FeedScreen = ({navigation}) => {
 
     const [loading, setLoading] = useState(true);
     const [imagesData, setImagesData] = useState("");
@@ -41,7 +47,7 @@ const FeedScreen = () => {
     const _isMounted = useRef(true);
 
     useEffect(() => {
-        fetch('https://picsum.photos/v2/list?page=2&limit=30')
+        fetch('http://192.168.1.16:8080/api/orchids')
         .then((response) => response.json())
         .then((responseJson) => {
             setImagesData(responseJson);
@@ -67,14 +73,11 @@ const FeedScreen = () => {
     updateSearch = (text) => {
       // Check if searched text is not blank
       if (text) {
-        // Inserted text is not blank
-        // Filter the masterDataSource
-        // Update FilteredDataSource
         const newData = masterDataSource.filter(
           function (item) {
-            console.log(item.author)
-            const itemData = item.author
-              ? item.author.toUpperCase()
+            //console.log(item.author)
+            const itemData = item.science_name
+              ? item.science_name.toUpperCase()
               : ''.toUpperCase();
             const textData = text.toUpperCase();
             return itemData.indexOf(textData) > -1;
@@ -88,7 +91,7 @@ const FeedScreen = () => {
     };
 
     return (
-        <SafeAreaView  style={styles.container} >
+        <SafeAreaView style={styles.container} >
         {
           (loading)
             ?
@@ -97,14 +100,7 @@ const FeedScreen = () => {
               <Text style={styles.loadingText}>Please Wait...</Text>
             </View>)
             :
-            (<View style={{ flex: 1}}>                    
-                {/* <TextInput
-                      style={styles.textInputStyle}
-                      onChangeText={(text) => updateSearch(text)}
-                      value={search}
-                      underlineColorAndroid="transparent"
-                      placeholder="Search Here"
-                /> */}
+            (<View style={{ flex: 1, marginBottom: 75}}>                    
                   <SearchBar
                     round
                     lightTheme
@@ -123,13 +119,24 @@ const FeedScreen = () => {
                 </TouchableOpacity>
              
                 <FlatList 
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.orchid_id}
                   key={(gridView) ? 1 : 0}
                   numColumns={gridView ? 2 : 1}
                   data={imagesData}
                   renderItem={({ item }) =>
-                    <ImageComponent imageURI={item.download_url} name={item.author.toUpperCase()} />
-                  } />
+                    <ImageComponent 
+                        route = {navigation}
+                        data={item} 
+                        name={item.science_name.toUpperCase()} 
+                        imageURI={item.url_m[0]} 
+                    />
+                  }
+                  initialNumToRender = {0}
+                  maxToRenderPerBatch = {5}
+                  removeClippedSubviews = {true}
+                  scrollEventThrottle = {16}
+                  windowSize = {2}
+                />
               
             </View>)
         }
@@ -186,7 +193,6 @@ const styles = StyleSheet.create(
         alignSelf: 'stretch'
       },
       textInputStyle: {
-        //flex: 0.8,
         height: 40,
         borderWidth: 1,
         paddingLeft: 20,

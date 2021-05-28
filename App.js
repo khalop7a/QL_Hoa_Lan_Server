@@ -2,19 +2,20 @@ import React from 'react'
 import { Provider as PaperProvider } from 'react-native-paper';
 import { theme } from './src/core/theme'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack';
+import {LogBox} from 'react-native';
 import {
   StartScreen,
   LoginScreen,
   RegisterScreen,
   ResetPasswordScreen,
 } from './src/screens/Login';
-import { HomeStackScreen } from './src/screens/Home';
+import { HomeStackScreen, NewsScreen, DetailScreen } from './src/screens/Home';
 
 const Stack = createStackNavigator()
 
 const App = () => {
-
+  LogBox.ignoreAllLogs(true);
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
@@ -32,6 +33,8 @@ const App = () => {
             component={ResetPasswordScreen}
           />
           <Stack.Screen name="HomeStackScreen" component={HomeStackScreen} />
+          <Stack.Screen name="NewsScreen" component={NewsScreen} />
+          <Stack.Screen name="DetailScreen" component={DetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

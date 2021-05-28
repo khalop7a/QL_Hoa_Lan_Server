@@ -58,7 +58,6 @@ const LoginScreen = ({ navigation }) => {
                                 setisSigningIn(false);
                                 return;
                             }
-                            // console.log(response.user);
                             // return;
                             //Thêm vào Local Storage
                             _storeData(response.user.displayName);

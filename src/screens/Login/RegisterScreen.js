@@ -58,6 +58,7 @@ const RegisterScreen = ({ navigation }) => {
                         uid,
                         email: email.value,
                         displayName: name.value,
+                        favourite: [],
                     };
                     const usersRef = firebase.firestore().collection('users')
                     usersRef
