@@ -61,9 +61,7 @@ const SettingsScreen = ({ navigation }) => {
 xác nhận mật khẩu và tên đăng nhập sau khi hoàn tất quy trình đăng ký 
 dịch vụ cụ thể. Các mật khẩu hoặc tên đăng nhập đó sẽ chỉ dành riêng cho 
 bạn và bạn không được phép chuyển nhượng. Bạn có trách nhiệm duy trì tính 
-bảo mật của mật khẩu vả hoàn toàn chịu trách nhiệm về mọi hoạt động diễn 
-ra liên quan đến mật khẩu hoặc tài khoản của bạn.
-                    `,
+bảo mật của mật khẩu vả hoàn toàn chịu trách nhiệm về mọi hoạt động diễn ra liên quan đến mật khẩu hoặc tài khoản của bạn.`,
                     [
                         {text: 'OK', onPress: () => {}, style: 'cancel' },
                     ],

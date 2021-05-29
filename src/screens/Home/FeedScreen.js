@@ -75,7 +75,6 @@ const FeedScreen = ({navigation}) => {
       if (text) {
         const newData = masterDataSource.filter(
           function (item) {
-            //console.log(item.author)
             const itemData = item.science_name
               ? item.science_name.toUpperCase()
               : ''.toUpperCase();
@@ -119,7 +118,9 @@ const FeedScreen = ({navigation}) => {
                 </TouchableOpacity>
              
                 <FlatList 
-                  keyExtractor={(item) => item.orchid_id}
+                  keyExtractor={(item, index) => {
+                      return  index.toString();
+                  }}
                   key={(gridView) ? 1 : 0}
                   numColumns={gridView ? 2 : 1}
                   data={imagesData}

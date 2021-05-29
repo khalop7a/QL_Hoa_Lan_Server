@@ -240,7 +240,9 @@ const DetailScreen = ({route, navigation}) => {
                         horizontal={true}
                         data={url_m}
                         extraData={this.state}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item, index) => {
+                            return  index.toString();
+                        }}
                         renderItem={({item}) => {
                             return <Image source={{uri: item}} style={{height: 200, width: 250, borderRadius: 10}}/>;
                         }}

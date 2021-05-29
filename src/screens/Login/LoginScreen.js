@@ -21,8 +21,9 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState({ value: '', error: '' });
     const [isSigningIn, setisSigningIn] = useState(false);
    
-    _storeData = async (displayName) => {
+    _storeData = async (displayName, uid) => {
         try {
+            await AsyncStorage.setItem('uid-key', JSON.stringify(uid));
             await AsyncStorage.setItem('email-key', JSON.stringify(email.value));
             await AsyncStorage.setItem('passwork-key', JSON.stringify(password.value));
             await AsyncStorage.setItem('displayName-key', JSON.stringify(displayName));
@@ -65,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
                                 return;
                             }
                             //Thêm vào Local Storage
-                            _storeData(response.user.displayName);
+                            _storeData(response.user.displayName, uid);
                             navigation.reset({
                                 index: 0,
                                 routes: [{ name: 'HomeStackScreen' }],

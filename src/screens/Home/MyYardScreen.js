@@ -1,72 +1,70 @@
-import React, {useEffect, useState} from 'react'
-import { View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, Animated, Alert, ActivityIndicator } from 'react-native'
+import React, {useEffect, useState, useRef} from 'react'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, Animated, Alert, ActivityIndicator, FlatList } from 'react-native'
 import axios from 'axios';
-import { firebase } from '../../firebase/config';
 import { images } from '../../constants';
-import { FlatList } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const MyYardScreen = ({navigation}) => {
     
     const [favourite, setFavourite] = useState([]);
     const [favourite_id, setFavourite_id] = useState([]);
-    const [uid, setUid] = useState("");
     const [loading, setLoading] = useState(true);
-
+    let uid = "";
     const onPress = () => {
         navigation.navigate("Feed");
     }
-
-    //Reload Tab
-    React.useEffect(() => {
+   
+    useEffect(() => {  
         const unsubscribe = navigation.addListener('focus', async () => {
-            setLoading(true);
-            const res = await axios.get('https://orchid-server.herokuapp.com/api/user/' + uid);   
-            datum = res.data.favourite;
-            setFavourite_id(datum);
+            let datum = [];
             let result = [];
-            const query = await axios.get('https://orchid-server.herokuapp.com/api/orchids');
-            for(var i in query.data){
-                for(var j in datum ){
-                    if( query.data[i].orchid_id == datum[j]){
-                        result.push(query.data[i]);
+            try {
+                const value = await AsyncStorage.getItem('uid-key');
+                const res = value.split('"');
+                uid = res[1];
+            } catch (error) {
+                console.log(error)
+            }
+            await axios.get('https://orchid-server.herokuapp.com/api/user/' + uid)
+            .then(response => {
+                datum = response.data.favourite;
+                setFavourite_id(datum);
+            })
+            .catch(error => console.log(error));
+            
+            await axios.get('https://orchid-server.herokuapp.com/api/orchids')
+            .then(response => {
+                for(i = 0; i < response.data.length; i++){
+                    for(var j = 0; j < datum.length; j++ ){
+                        if( response.data[i].orchid_id == datum[j]){
+                            result.push(response.data[i]);
+                        }
                     }
                 }
-            }        
+            })
+            .catch(error => console.log(error));
             setFavourite(result);
             setLoading(false)
         });
-    
         return unsubscribe;
-    }, [navigation]);
+    }, [navigation])
 
     useEffect(async () => {
-        const dataa = await firebase.auth().currentUser
-        setUid(dataa.uid);
-        const res = await axios.get('https://orchid-server.herokuapp.com/api/user/' + dataa.uid);   
-        datum = res.data.favourite;
-        setFavourite_id(datum);
-        let result = [];
-        const query = await axios.get('https://orchid-server.herokuapp.com/api/orchids');
-        for(var i in query.data){
-            for(var j in datum ){
-                if( query.data[i].orchid_id == datum[j]){
-                    result.push(query.data[i]);
-                }
-            }
+        try {
+            const value = await AsyncStorage.getItem('uid-key');
+            const res = value.split('"');
+            uid = res[1];
+        } catch (error) {
+            console.log(error)
         }
-         setFavourite(result);
-         setLoading(false)
-    }, [])
-
-    useEffect(async () => {
         await axios.put('https://orchid-server.herokuapp.com/api/user/update/' + uid, {
             "favourite": favourite_id
-            });
+        });
      }, [favourite_id]);
 
     return (
-        <SafeAreaView style={{flex: 1, marginBottom: 70}}>
+        <SafeAreaView style={{flex: 1, marginBottom: 139}}>
         {
             (loading) ? 
             (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -95,10 +93,14 @@ const MyYardScreen = ({navigation}) => {
                 <View>
                     <Text style={{fontSize:30, color: '#0B610B', margin: 10, fontWeight: "900"}}>Yêu thích</Text>
                     <FlatList 
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item, index) => {
+                            return  index.toString();
+                        }}
                         data={favourite}
                         renderItem={({ item, index }) =>
-                        <Swipeable renderRightActions={(progress, dragX) => {
+                        <Swipeable 
+                            key= {index}
+                            renderRightActions={(progress, dragX) => {
                             const scale = dragX.interpolate({
                             inputRange: [-100, 0],
                             outputRange: [0.7, 0]
