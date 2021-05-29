@@ -35,9 +35,9 @@ const ResetPasswordScreen = ({ navigation }) => {
         <Background>
             <BackButton goBack={navigation.goBack} />
             <Logo />
-            <Header>Restore Password</Header>
+            <Header>Khôi phục mật khẩu</Header>
             <TextInput 
-                label="E-mail address"
+                label="Địa chỉ Email"
                 returnKeyType="done"
                 value={email.value}
                 onChangeText={(text) => setEmail({ value: text, error: '' })}
@@ -47,14 +47,14 @@ const ResetPasswordScreen = ({ navigation }) => {
                 autoCompleteType="email"
                 textContentType="emailAddress"
                 keyboardType="email-address"
-                description="You will receive email with password reset link."
+                description="Bạn sẽ nhận được email với link reset mật khẩu."
             />
             <Button
                 mode="contained"
                 onPress={sendResetPasswordEmail}
                 style={{ marginTop: 16 }}
             >
-                Send Instructions
+                Gửi
             </Button>
         </Background>
     )

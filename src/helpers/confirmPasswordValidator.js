@@ -1,6 +1,6 @@
 export function confirmPasswordValidator(confirmPassword, password) {
-    if (!confirmPassword) return "Confirm password can't be empty."
-    if (confirmPassword !== password) return "Passwords don't match."
+    if (!confirmPassword) return "Không được để trống."
+    if (confirmPassword !== password) return "Mật khẩu xác nhận chưa đúng."
     return ''
   }
   

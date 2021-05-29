@@ -13,22 +13,21 @@ const StartScreen = ({ navigation }) => {
     return (
         <Background>
             <Logo />
-            <Header>Login Template</Header>
+            <Header>Bắt đầu đăng nhập</Header>
             <Paragraph>
-                The easiest way to start with your amazing application.
+                Cách dễ dàng nhất để sử dụng App của chúng tôi
             </Paragraph>
             <Button
                 mode="contained"
                 onPress={() => navigation.navigate('LoginScreen')}
-                //onPress={ test }
             >
-                Login
+                Đăng nhập
             </Button>
             <Button
                 mode="outlined"
                 onPress={() => navigation.navigate('RegisterScreen')}
             >
-                Sign Up
+                Đăng ký
             </Button>
         </Background>
     )

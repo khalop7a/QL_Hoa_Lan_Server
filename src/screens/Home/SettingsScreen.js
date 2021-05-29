@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, FlatList, TouchableOpacity  } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { icons } from '../../constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import { firebase } from '../../firebase/config';
@@ -54,6 +54,43 @@ const SettingsScreen = ({ navigation }) => {
 
     _onPress = async (item) => {
         switch(item.id){
+            case 1: {
+                Alert.alert(
+                    'Điều khoản',
+                    `Bạn có thể được yêu cầu cung cấp hoặc bạn có thể nhận thông tin 
+xác nhận mật khẩu và tên đăng nhập sau khi hoàn tất quy trình đăng ký 
+dịch vụ cụ thể. Các mật khẩu hoặc tên đăng nhập đó sẽ chỉ dành riêng cho 
+bạn và bạn không được phép chuyển nhượng. Bạn có trách nhiệm duy trì tính 
+bảo mật của mật khẩu vả hoàn toàn chịu trách nhiệm về mọi hoạt động diễn 
+ra liên quan đến mật khẩu hoặc tài khoản của bạn.
+                    `,
+                    [
+                        {text: 'OK', onPress: () => {}, style: 'cancel' },
+                    ],
+                    { cancelable: true}
+                );
+                break;
+            }
+            case 2: {
+                navigation.navigate('ChangePassword')
+                break;
+            }
+            case 3: {
+                Alert.alert(
+                    'Thông tin',
+                    `Ứng dụng: Truy xuất nguồn gốc hoa lan
+Phiên bản: 1.0 
+Tác giả: Lê Minh Kha & Phạm Hoàng Duy
+Liên hệ: 0911674860
+Facebook: https://www.facebook.com/profile.php?id=100028949270829
+                    `,
+                    [
+                        {text: 'OK', onPress: () => {}, style: 'cancel' },
+                    ],
+                    { cancelable: true}
+                );
+                break;
+            }
             case 4: {
                 await firebase.auth().signOut().then(() =>{
                     _removeData();

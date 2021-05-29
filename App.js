@@ -10,7 +10,7 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
 } from './src/screens/Login';
-import { HomeStackScreen, NewsScreen, DetailScreen } from './src/screens/Home';
+import { HomeStackScreen, NewsScreen, DetailScreen, ChangePassword } from './src/screens/Home';
 
 const Stack = createStackNavigator()
 
@@ -35,6 +35,7 @@ const App = () => {
           <Stack.Screen name="HomeStackScreen" component={HomeStackScreen} />
           <Stack.Screen name="NewsScreen" component={NewsScreen} />
           <Stack.Screen name="DetailScreen" component={DetailScreen} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

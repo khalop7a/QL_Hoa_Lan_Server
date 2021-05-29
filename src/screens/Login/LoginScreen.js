@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import { Text } from 'react-native-paper';
 import { emailValidator } from '../../helpers/emailValidator';
 import { passwordValidator } from '../../helpers/passwordValidator';
@@ -54,11 +54,16 @@ const LoginScreen = ({ navigation }) => {
                         .get()
                         .then(firestoreDocument => {
                             if (!firestoreDocument.exists) {
-                                alert("User does not exist anymore.")
+                                Alert.alert("Lỗi", "Tài khoản này không tồn tại",
+                                    [
+                                        {text: 'OK', onPress: () => {}, style: 'cancel' },
+                                    ],
+                                    { cancelable: true}
+                                )
+                                //alert("User does not exist anymore.")
                                 setisSigningIn(false);
                                 return;
                             }
-                            // return;
                             //Thêm vào Local Storage
                             _storeData(response.user.displayName);
                             navigation.reset({
@@ -67,11 +72,21 @@ const LoginScreen = ({ navigation }) => {
                             })
                         })
                         .catch(error => {
-                            console.log(error);
+                            Alert.alert("Lỗi", "Mật khẩu chưa đúng",
+                                [
+                                    {text: 'OK', onPress: () => {}, style: 'cancel' },
+                                ],
+                                { cancelable: true}
+                            )
                     });
                 })
                 .catch(error => {
-                    console.log(error);
+                    Alert.alert("Lỗi", "Sai tên đăng nhập hoặc mật khẩu",
+                        [
+                            {text: 'OK', onPress: () => {}, style: 'cancel' },
+                        ],
+                        { cancelable: true}
+                    )
                 })      
         setisSigningIn(false);
     }
@@ -80,9 +95,9 @@ const LoginScreen = ({ navigation }) => {
         <Background>
             <BackButton goBack={navigation.goBack} />
             <Logo />
-            <Header>Welcome back.</Header>               
+            <Header>Chào mừng bạn</Header>               
             <TextInput 
-                label="Email"
+                label="Địa chỉ Email"
                 returnKeyType="next"
                 value={email.value}
                 onChangeText={(text) => setEmail({ value: text, error: '' })}
@@ -95,7 +110,7 @@ const LoginScreen = ({ navigation }) => {
             />
         
             <TextInput
-                label="Password"
+                label="Mật khẩu"
                 returnKeyType="done"
                 value={password.value}
                 onChangeText={(text) => setPassword({ value: text, error: '' })}
@@ -108,7 +123,7 @@ const LoginScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('ResetPasswordScreen')}
                 >
-                    <Text style={styles.forgot}>Forgot your password?</Text>
+                    <Text style={styles.forgot}>Quên mật khẩu?</Text>
                 </TouchableOpacity>
             </View>
 
@@ -116,13 +131,13 @@ const LoginScreen = ({ navigation }) => {
                 <ActivityIndicator size="large" color="#0000ff"/>
             ) : (
                 <Button mode="contained" onPress={onLoginPressed}>
-                    Login
+                    Đăng nhập
                 </Button>
             )}            
             <View style={styles.row}>
-                <Text>Don’t have an account? </Text>
+                <Text>Bạn chưa có tài khoản? </Text>
                 <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-                    <Text style={styles.link}>Sign up</Text>
+                    <Text style={styles.link}>Đăng ký</Text>
                 </TouchableOpacity>
             </View>
         </Background>

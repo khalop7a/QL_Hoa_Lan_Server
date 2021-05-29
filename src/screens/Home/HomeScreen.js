@@ -38,12 +38,11 @@ const HomeScreen = ({navigation}) => {
     }, []);
 
     useEffect(() => {
-      fetch('http://192.168.1.16:8080/api/slides')
+      fetch('https://orchid-server.herokuapp.com/api/slides')
       .then((response) => response.json())
       .then((responseJson) => {
           setData(responseJson);
           setLoading(false);
-          //console.log(data[3].image
       })
       .catch((error) => {
           console.error(error);
@@ -115,7 +114,7 @@ const HomeScreen = ({navigation}) => {
             >
                 <Text style={styles.homeText}>Hoa Lan</Text>
             </ImageBackground>
-            <View style={{ flex: 0.4, marginTop: 10}}>
+            <View style={{ flex: 0.4}}>
                 <FlatList
                     data={data}
                     style={{ flex: 1 }}

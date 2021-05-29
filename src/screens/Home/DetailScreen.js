@@ -48,28 +48,29 @@ const DetailScreen = ({route, navigation}) => {
     }
 
     const onPress = async () => {    
-        const res = await axios.get('http://192.168.1.16:8080/api/user/' + user);   
+        const res = await axios.get('https://orchid-server.herokuapp.com/api/user/' + user);   
         favourite = res.data.favourite;
         setLoading(true);
         if(checkID()){
+            setLoading(false)
             Alert.alert(
                 'Thông báo',
-                'Dữ liệu này đã được thêm',
+                'Loại hoa này đã thêm vào mục yêu thích',
                 [
-                  {text: 'OK', onPress: () => setLoading(false)},
+                  {text: 'OK', onPress: () => {}},
                 ],
             );
         }
         else{
             favourite.push(orchid_id);
-            const res = await axios.put('http://192.168.1.16:8080/api/user/update/' + user, {
+            const res = await axios.put('https://orchid-server.herokuapp.com/api/user/update/' + user, {
                 "favourite": favourite
             }).then(resp => {
                 setLoading(false);
             })
             Alert.alert(
                 'Thông báo',
-                'Lưu thành công',
+                'Thêm thành công',
                 [
                   {text: 'OK', onPress: () => {
                   }},

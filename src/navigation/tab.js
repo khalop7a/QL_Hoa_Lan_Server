@@ -93,7 +93,10 @@ const Tabs = () => {
                     <CustomTabBarButton {...props} />
                 )
             }}/>           
-            <Tab.Screen name="MyYard" component={MyYardScreen} options= {{
+            <Tab.Screen 
+                name="MyYard" 
+                component={MyYardScreen}               
+                options= {{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center'}}>
                         <Image 

@@ -6,6 +6,8 @@ import CameraScreen from './CameraScreen';
 import HomeStackScreen from './HomeStackScreen';
 import NewsScreen from './NewsScreen';
 import DetailScreen from './DetailScreen';
+import ChangePassword from './ChangePassword';
+
 export {
     HomeScreen,
     FeedScreen,
@@ -14,5 +16,6 @@ export {
     CameraScreen,
     HomeStackScreen,
     NewsScreen,
-    DetailScreen
+    DetailScreen,
+    ChangePassword
 }
