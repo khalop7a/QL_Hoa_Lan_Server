@@ -39,6 +39,23 @@ const getAllOrchids = async (req, res) => {
     }
 }
 
+const getOrchid = async(req, res, next) => {
+    try{
+        const uid = req.params.uid;
+        const orchid = await firestore.collection('orchids').doc(uid);
+        const data = await orchid.get();
+        if (!data.exists){
+            res.status(404).send('Orchid with the given ID not found');
+        }else{
+            res.send(data.data());
+        }
+    }
+    catch(error){
+        res.status(400).send(error.message);
+    }
+}
+
 module.exports = {
     getAllOrchids,
+    getOrchid
 }

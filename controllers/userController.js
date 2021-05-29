@@ -2,32 +2,26 @@
 
 const admin = require('../db');
 const User = require('../models/user');
-const bcrypt = require('bcrypt');
 
 const firestore = admin.firestore();
 
-const saltRounds = 10;
-
-const addUser = async (req, res) => {
-    await bcrypt.hash(req.body.user.password, saltRounds, (err, hash)=>{
-        try {  
-            const user = new User(
-                req.body.user.uid,
-                req.body.user.email,
-                hash,
-                req.body.user.name,
-                req.body.user.favourite
-            );
-            admin.auth().createUser(
-                user
-            )
-            res.json({message:'User Created'})
-        } 
-        catch(e){
-            console.log(e)
-            res.json({message:'Error creating user'})
-        }
-    })
+const updatePassword = async (req, res) => {
+    try{
+        const uid = req.params.uid;
+        const data = req.body;
+        admin.auth().updateUser(uid, JSON.stringify(data))
+        .then(function(userRecord) {
+            res.send('Account record updated successfuly');
+            console.log("Successfully updated user", userRecord.toJSON());
+        })
+        .catch(function(error) {
+            console.log("Error updating user:", error);
+        });
+    }
+    catch(error){
+        res.status(400).send(error.message);
+    }
+    
 }
 
 const getUser = async (req, res) => {
@@ -80,7 +74,6 @@ const deleteUser = async (req, res) => {
 const updateUser = async(req, res, next) => {
     try{
         const uid = req.params.uid;
-        //console.log(uid);
         const data = req.body;
         const user = await firestore.collection('users').doc(uid);
         await user.update(data);
@@ -91,32 +84,10 @@ const updateUser = async(req, res, next) => {
     }
 }
 
-const signIn = async (req, res) => {
-    try{
-        const user = await admin.auth().getUserByEmail(req.body.email)
-        //await admin.auth().
-        {
-            try{
-                    const token =await admin.auth().createCustomToken(req.body.email)
-                    res.json(token)
-                    
-                } 
-            catch(e){
-                console.log(e)
-                res.json({message:'Error Generating Token!Please try again'})
-            }
-        }
-    }
-    catch(e){
-        res.json({message:'No user record found'})
-    }
-}
-
 module.exports = {
-    addUser,
+    updatePassword,
     getUser,
     getAllUsers,
     deleteUser,
     updateUser,
-    signIn,
 }
