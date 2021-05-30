@@ -20,7 +20,7 @@ import axios from 'axios';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 const DetailScreen = ({route, navigation}) => {
-    const { orchid_id, url_m, science_name, category, location, humidity, warm, intermediate, description } = route.params;
+    const { orchid_id, url_m, science_name, name, category, location, humidity, warm, intermediate, description } = route.params;
     const [user, setUser] = useState("");
     const [loading, setLoading] = useState(false);
     const [textShown, setTextShown] = useState(false);  //To show ur remaining Text
@@ -102,13 +102,13 @@ const DetailScreen = ({route, navigation}) => {
                 >                  
                 </ImageBackground>
                 <View style={styles.viewHolder}>
-                    <Text style = {styles.heading}>{science_name}</Text>
+                    <Text style = {[styles.heading]}>{science_name}</Text>
                     <Text style = {styles.textVi}>Tên tiếng việt: </Text>
-                    <Text style = {styles.keyTextVi}>{science_name}</Text>
+                    <Text style = {styles.keyTextVi}>{name}</Text>
                     <Text style = {styles.category}>Loại (nhóm):</Text>
                     <Text style = {styles.keyCategory}>{category}</Text>
                     <Text style = {styles.locations}>Phân bố:</Text>
-                    <Text style = {styles.keyLocations}>{location}</Text>
+                    <Text style = {[styles.keyLocations, {width: 240}]}>{location}</Text>
                     {
                         (!loading) ? 
                         (
