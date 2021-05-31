@@ -62,7 +62,7 @@ const LoginScreen = ({ navigation }) => {
                                     { cancelable: true}
                                 )
                                 //alert("User does not exist anymore.")
-                                setisSigningIn(false);
+                                //setisSigningIn(false);
                                 return;
                             }
                             //Thêm vào Local Storage

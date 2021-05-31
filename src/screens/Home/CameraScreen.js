@@ -5,11 +5,11 @@ import * as tf from "@tensorflow/tfjs";
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import { fetch, decodeJpeg } from '@tensorflow/tfjs-react-native';
 import * as jpeg from 'jpeg-js';
-//const mobilenet = require('@tensorflow-models/mobilenet');
+//import '@tensorflow/tfjs-backend-webgl';
 
 const CameraScreen = () => {
 
-    const [url, setUrl] = useState('https://cdn.britannica.com/79/65379-050-5CF52BAC/Shortfin-mako-shark-seas.jpg')
+    const [url, setUrl] = useState('http://icdn.dantri.com.vn/zoom/1200_630/2019/02/14/camapdocx-1550156095359.jpeg')
     const [displayText, setDisplayText] = useState("loading");
 
     takePicture = async () => {
@@ -23,22 +23,26 @@ const CameraScreen = () => {
     async function getPrediction(url){
       setDisplayText("Loading Tensor Flow")
       await tf.ready();
+      //tf.setBackend('cpu');
       setDisplayText("Loading Mobile Net");
-      const model = await mobilenet.load();
+      const model = new mobilenet.MobileNet(1, 1);
+      await model.load();
+      //const model = await mobilenet.load().catch((err) => err);
+      //const model = await mobilenet.load();
       console.log("Kha: " +  model);
       setDisplayText("Fetching Image");
       const response = await fetch(url, {}, {isBinary: true});
-      console.log(response);
       setDisplayText("Getting Image Buffer");
       const imageData = await response.arrayBuffer();
       setDisplayText("Getting Image Tensor");
       const imageTensor = imageToTensor(imageData);
       setDisplayText("Getting Classification Result");
-      prediction = await model.classify(imageTensor);
+      //console.log(imageTensor);
+      const prediction = await model.classify(imageTensor);
       setDisplayText(JSON.stringify(prediction)); 
    } 
 
-    imageToTensor = (rawData) => {
+    function imageToTensor(rawData){
       const { width, height, data } = jpeg.decode(rawData, true);
       const buffer = new Uint8Array(width*height*3);
       let offset= 0;
@@ -49,6 +53,7 @@ const CameraScreen = () => {
         offset += 4; //Skip Alpha Value
       } 
       return tf.tensor3d(buffer, [height, width, 3]);
+
     }
 
     return (
