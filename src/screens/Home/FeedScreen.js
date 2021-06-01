@@ -68,7 +68,7 @@ const FeedScreen = ({navigation}) => {
         else{
           setbtnView(icons.gridView)
         }
-      }
+    }
     
     updateSearch = (text) => {
       // Check if searched text is not blank

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useMemo} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {BackButton} from '../../components';
 import {
     TouchableOpacity, 
@@ -198,17 +198,17 @@ const DetailScreen = ({route, navigation}) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                        style={{
-                            padding: 10,
-                            paddingBottom: 15,
-                            backgroundColor: 'green',
-                            borderRadius: 50,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginRight: 10,
-                            ...styles.shadow
-                        }}
-                    >
+                            style={{
+                                padding: 10,
+                                paddingBottom: 15,
+                                backgroundColor: 'green',
+                                borderRadius: 50,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginRight: 10,
+                                ...styles.shadow
+                            }}
+                        >
                         <View
                             style={{
                                 width: 50,

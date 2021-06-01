@@ -7,6 +7,7 @@ import HomeStackScreen from './HomeStackScreen';
 import NewsScreen from './NewsScreen';
 import DetailScreen from './DetailScreen';
 import ChangePassword from './ChangePassword';
+import CameraDetailScreen from './CameraDetailScreen';
 
 export {
     HomeScreen,
@@ -17,5 +18,6 @@ export {
     HomeStackScreen,
     NewsScreen,
     DetailScreen,
-    ChangePassword
+    ChangePassword,
+    CameraDetailScreen
 }

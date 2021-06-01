@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     Dimensions,
     FlatList,
-    Image
+    Image,
+    ActivityIndicator
 } from 'react-native';
 import { images, icons } from '../../constants';
 
@@ -112,24 +113,35 @@ const HomeScreen = ({navigation}) => {
                 imageStyle={{ borderBottomLeftRadius: 50, borderBottomRightRadius: 50}}
             >
                 <Text style={styles.homeText}>Hoa Lan</Text>
-            </ImageBackground>
-            <View style={{ flex: 0.4}}>
-                <FlatList
-                    data={data}
-                    style={{ flex: 1 }}
-                    keyExtractor={(item) => item.id}
-                    renderItem={( {item} ) => {
-                        return <Slide data={item.image} />;
-                    }}
-                    pagingEnabled
-                    horizontal
-                    bounces={false}
-                    showsHorizontalScrollIndicator={false}
-                    onScroll={onScroll}
-                    {...flatListOptimizationProps}
-                />
-                <Pagination index={index}></Pagination>
-            </View>
+            </ImageBackground>        
+              <View style={{ flex: 0.4, marginBottom: 10}}>
+              {
+                (loading) ? 
+                (
+                  <ActivityIndicator size="large" color="#00ff00" style={{position: 'absolute', top: 100, left: 190}}/>
+                ):
+                (
+                  <View style={{ flex: 1}}>
+                    <FlatList
+                      data={data}
+                      style={{ flex: 1 }}
+                      keyExtractor={(item) => item.id}
+                      renderItem={( {item} ) => {
+                          return <Slide data={item.image} />;
+                      }}
+                      pagingEnabled
+                      horizontal
+                      bounces={false}
+                      showsHorizontalScrollIndicator={false}
+                      onScroll={onScroll}
+                      {...flatListOptimizationProps}
+                    />
+                    <Pagination index={index}></Pagination>
+                  </View>
+                )
+              }         
+              </View>
+          
             <TouchableOpacity 
               style={{
                 flex: 0.2, 
@@ -174,7 +186,7 @@ const styles = StyleSheet.create({
     },
     pagination: {
         position: "absolute",
-        bottom: 5,
+        bottom: 0,
         width: "100%",
         justifyContent: "center",
         flexDirection: "row",
