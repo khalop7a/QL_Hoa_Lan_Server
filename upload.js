@@ -23,7 +23,7 @@ fs.readdir(directoryPath, function(err, files) {
     menu.forEach(function(obj) {
       firestore
         .collection(file.substring(0, lastDotIndex)) //Lấy tên file làm tên colection
-        .doc(obj.feed_id)
+        .doc(obj.orchid_id)
         .set(obj)
         .then(function(docRef) {
           console.log("Document written");

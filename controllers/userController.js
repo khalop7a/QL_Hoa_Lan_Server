@@ -2,27 +2,7 @@
 
 const admin = require('../db');
 const User = require('../models/user');
-
 const firestore = admin.firestore();
-
-const updatePassword = async (req, res) => {
-    try{
-        const uid = req.params.uid;
-        const data = req.body;
-        admin.auth().updateUser(uid, JSON.stringify(data))
-        .then(function(userRecord) {
-            res.send('Account record updated successfuly');
-            console.log("Successfully updated user", userRecord.toJSON());
-        })
-        .catch(function(error) {
-            console.log("Error updating user:", error);
-        });
-    }
-    catch(error){
-        res.status(400).send(error.message);
-    }
-    
-}
 
 const getUser = async (req, res) => {
     try{
@@ -39,6 +19,11 @@ const getUser = async (req, res) => {
         res.status(400).send(error.message);
     }
 }
+
+// const infoAI = async (req, res) => {
+//     console.log(result);
+//     //res.send(JSON.parse(result));
+// }
 
 const getAllUsers = async (req, res) => {
     try{
@@ -85,7 +70,6 @@ const updateUser = async(req, res, next) => {
 }
 
 module.exports = {
-    updatePassword,
     getUser,
     getAllUsers,
     deleteUser,

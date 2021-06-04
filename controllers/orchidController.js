@@ -11,7 +11,7 @@ const getAllOrchids = async (req, res) => {
         const data = await orchids.get();
         const orchidsArray = [];
         if (data.empty){
-            res.status(404).send('No account record found');
+            res.status(404).send('No orchid record found');
         }
         else{
             data.forEach(element => {
