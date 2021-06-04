@@ -36,7 +36,7 @@ const ImageComponent = (props) => {
                 {
                   lengthMore ? <Text
                   onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 21, marginTop: 10, fontSize: 20, color: 'green' }}>{textShown ? 'Read less...' : 'Read more...'}</Text>
+                  style={{ lineHeight: 21, marginTop: 10, fontSize: 20, color: 'green' }}>{textShown ? 'Thu gọn...' : 'Đọc thêm...'}</Text>
                   :null
                 } 
             </View>    

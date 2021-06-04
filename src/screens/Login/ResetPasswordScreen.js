@@ -23,14 +23,12 @@ const ResetPasswordScreen = ({ navigation }) => {
                 .auth()
                 .sendPasswordResetEmail(email.value)
                 .then(function(){
-
+                    navigation.navigate('LoginScreen');
                 })
                 .catch(function(error) {
-                    console.log(error);
-                    });
-        navigation.navigate('LoginScreen');
+                    alert("Lỗi: " + "tài khoản không tồn tại hoặc đã bị xóa");
+                });   
     }
-
     return (
         <Background>
             <BackButton goBack={navigation.goBack} />

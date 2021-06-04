@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { theme } from '../../core/theme';
 import { Text } from 'react-native-paper'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Keyboard, ScrollView, Alert } from 'react-native'
 import { emailValidator } from '../../helpers/emailValidator';
 import { passwordValidator } from '../../helpers/passwordValidator';
 import { nameValidator } from '../../helpers/nameValidator';
@@ -22,6 +22,7 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState({value: '', error: ''});
     const [password, setPassword] = useState({value: '', error: ''});
     const [confirmPassword, setConfirmPassword] = useState({value: '', error: ''})
+    const [loading, setLoading] = useState(false);
 
     _storeData = async (displayName) => {
         try {
@@ -35,6 +36,8 @@ const RegisterScreen = ({ navigation }) => {
     };    
 
     const onSignUpPressed = async () => {
+        Keyboard.dismiss();
+        setLoading(true);
         const nameError = nameValidator(name.value);
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
@@ -44,6 +47,7 @@ const RegisterScreen = ({ navigation }) => {
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
             setConfirmPassword({...confirmPassword, error: confirmPasswordError});
+            setLoading(false);
             return;
         }
         await firebase
@@ -60,28 +64,47 @@ const RegisterScreen = ({ navigation }) => {
                         displayName: name.value,
                         favourite: [],
                     };
-                    const usersRef = firebase.firestore().collection('users')
-                    usersRef
-                        .doc(uid)
-                        .set(data)
-                        .then(() => {
-                            _storeData(name.value);
-                            navigation.reset({
-                                index: 0,
-                                routes: [{name: 'HomeStackScreen'}]
+                    _storeData(name.value);
+                    const usersRef = firebase.firestore().collection('users')  
+                    usersRef.doc(uid).get()
+                    .then(documentSnapshot => {
+                        if (!documentSnapshot.exists) {
+                            usersRef
+                            .doc(uid)
+                            .set(data)
+                            .then(() => {                                           
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{name: 'HomeStackScreen'}]
+                                })
                             })
-                        })
-                        .catch((error) => {
-                            alert(error)
-                        });
+                            .catch((error) => {
+                                setLoading(false);
+                                Alert.alert("Thông báo", error,
+                                    [
+                                        {text: 'OK', onPress: () => {}, style: 'cancel' },
+                                    ],
+                                    { cancelable: true}
+                                )
+                            });
+                        }
+                    });
+
                 })
                 .catch((error) => {
-                    alert(error)
+                    setLoading(false);
+                    Alert.alert("Thông báo", "Địa chỉ email này đã được đăng ký bởi tài khoản khác!",
+                        [
+                            {text: 'OK', onPress: () => {}, style: 'cancel' },
+                        ],
+                        { cancelable: true}
+                    )
             });
     }
 
     return (    
-        <Background>
+        <ScrollView>
+            <Background>
             <BackButton goBack={navigation.goBack} />
             <Logo />
             <Header>Tạo tài khoản</Header>
@@ -123,20 +146,29 @@ const RegisterScreen = ({ navigation }) => {
                 errorText={confirmPassword.error}
                 secureTextEntry
             />
-            <Button
-                mode="contained"
-                onPress={onSignUpPressed}
-                style={{ marginTop: 24 }}
-            >
-                Đăng ký
-            </Button>
+            {
+                (!loading) ? 
+                (
+                    <Button
+                        mode="contained"
+                        onPress={onSignUpPressed}
+                        style={{ marginTop: 24 }}
+                    >
+                        Đăng ký
+                    </Button>
+                ) :
+                (
+                    <ActivityIndicator size="large" color="#00ff00" />
+                )
+            }
             <View style={styles.row}>
                 <Text>Bạn đã có tài khoản? </Text>
                 <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
                 <Text style={styles.link}>Đăng nhập</Text>
                 </TouchableOpacity>
             </View>
-        </Background>
+            </Background>
+        </ScrollView>
        
     )
 }

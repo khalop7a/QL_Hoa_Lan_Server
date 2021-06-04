@@ -1,77 +1,55 @@
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, {useState} from 'react'
+import { 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View,
+} from 'react-native'
 import { RNCamera } from 'react-native-camera';
-/*---------------IMPORT AI---------------*/
-// import * as tf from "@tensorflow/tfjs";
-// import * as mobilenet from '@tensorflow-models/mobilenet';
-// import { fetch, decodeJpeg } from '@tensorflow/tfjs-react-native';
-// import * as jpeg from 'jpeg-js';
-//import '@tensorflow/tfjs-backend-webgl';
+import axios from 'axios';
 
 const CameraScreen = ({navigation}) => {
 
-    takePicture = async () => {
-        if (this.camera) {
-          const options = { quality: 0.5, base64: true };
-          const data = await this.camera.takePictureAsync(options);
-          navigation.navigate('CameraDetailScreen', {
-            uri: data.uri,
-          });
-          //console.log(data.uri);
-        }
-    };
+  takePicture = async () => {
+      if (this.camera) {
+        const options = { quality: 0.5, base64: true };
+        const data = await this.camera.takePictureAsync(options);
+        //Get dữ liệu
+      const datum = new FormData();
+      datum.append('name', 'avatar');
+      datum.append('fileData', {
+        uri : data.uri,
+        type: "image/jpeg",
+        name: data.uri.substring(data.uri.lastIndexOf("/") + 1, data.uri.length)
+      });
+      const config = {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        },
+        body: datum,
+      };
+      //POST hình lên Server 
+      await fetch("http://192.168.1.16:8080/api/" + "upload", config)
+      .then((response) => {
 
-  /*-----------------AI------------------*/
-  // const [url, setUrl] = useState('http://icdn.dantri.com.vn/zoom/1200_630/2019/02/14/camapdocx-1550156095359.jpeg')
-  // const [displayText, setDisplayText] = useState("loading");
-  //   async function getPrediction(url){
-  //     setDisplayText("Loading Tensor Flow")
-  //     await tf.ready();
-  //     setDisplayText("Loading Mobile Net");
-  //     const model = await mobilenet.load();
-  //     console.log("Kha: " +  model);
-  //     setDisplayText("Fetching Image");
-  //     const response = await fetch(url, {}, {isBinary: true});
-  //     setDisplayText("Getting Image Buffer");
-  //     const imageData = await response.arrayBuffer();
-  //     setDisplayText("Getting Image Tensor");
-  //     const imageTensor = imageToTensor(imageData);
-  //     setDisplayText("Getting Classification Result");
-  //     const prediction = await model.classify(imageTensor);
-  //     setDisplayText(JSON.stringify(prediction)); 
-  //  } 
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+      //Chờ kết quả phản hồi
+      const res = await axios.get('http://192.168.1.16:8080/api/download');
+      console.log(res.data)
+        // navigation.navigate('CameraDetailScreen', {
+        //   uri: data.uri,
+        // });
+      }
+  };
 
-  //   function imageToTensor(rawData){
-  //     const { width, height, data } = jpeg.decode(rawData, true);
-  //     const buffer = new Uint8Array(width*height*3);
-  //     let offset= 0;
-  //     for(let i = 0; i < buffer.length; i+=3){
-  //       buffer[i] = data[offset]; //Read
-  //       buffer[i+1] = data[offset + 1]; //Green
-  //       buffer[i+2] = data[offset + 2]; //Blue
-  //       offset += 4; //Skip Alpha Value
-  //     } 
-  //     return tf.tensor3d(buffer, [height, width, 3]);
-
-  //   }
-
-    return (
-        <View style={styles.container}>
-          {/* <Text>Only works with Jpeg images</Text>
-          <TextInput 
-            style={{width: '90%', height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={text => setUrl(text)}
-            value={url}
-          />
-          <Image style={styles.imageStyle} source={{uri: url}}></Image>
-          <TouchableOpacity style={{width: 150, height: 30, backgroundColor: 'green'}}
-            onPress = {() => getPrediction(url)
-            //onPress = {() => console.log("1")
-            }>
-            <Text>Classify Image</Text>
-          </TouchableOpacity>
-          <Text>{displayText}</Text> */}
-        <RNCamera
+  return (
+      <View style={styles.container}>
+          <RNCamera
           ref={ref => {
             this.camera = ref;
           }}
@@ -98,11 +76,11 @@ const CameraScreen = ({navigation}) => {
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
             <Text style={{ fontSize: 14 }}> SCAN </Text>
           </TouchableOpacity>
-        </View>
+        </View> 
       </View>
-    )
-}
-
+      )
+    }
+    
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -111,13 +89,7 @@ const styles = StyleSheet.create({
       marginBottom: 70
     },
     preview: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-    },
-    imageStyle: {
-      width: 300,
-      height: 300
+      flex: 1
     },
     capture: {
       flex: 0,
@@ -127,6 +99,27 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
       alignSelf: 'center',
       margin: 20,
+    },
+    titleText: {
+      fontSize: 22,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      paddingVertical: 20,
+    },
+    textStyle: {
+      padding: 10,
+      color: 'black',
+    },
+    buttonStyle: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      backgroundColor: '#DDDDDD',
+      padding: 5,
+    },
+    imageStyle: {
+      width: 200,
+      height: 200,
+      margin: 5,
     },
 });
 
