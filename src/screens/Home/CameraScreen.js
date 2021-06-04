@@ -11,10 +11,10 @@ import axios from 'axios';
 const CameraScreen = ({navigation}) => {
 
   takePicture = async () => {
-      if (this.camera) {
-        const options = { quality: 0.5, base64: true };
-        const data = await this.camera.takePictureAsync(options);
-        //Get dữ liệu
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options);
+      //Get dữ liệu
       const datum = new FormData();
       datum.append('name', 'avatar');
       datum.append('fileData', {
