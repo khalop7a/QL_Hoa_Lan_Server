@@ -17,8 +17,8 @@ const getInfoAI = async (req, res) => {
         if (err) {
             console.log('Error: ', err);
         } else{
+            //Convert về hình ảnh quy định của Tensorlow
             image(req.file.path, async function (err, image) {
-
             const numChannels = 3;
             const numPixels = image.width * image.height;
             const values = new Int32Array(numPixels * numChannels);
@@ -40,12 +40,17 @@ const getInfoAI = async (req, res) => {
                 const predictions = await model.classify(img);
                 //Gửi kết quả vào biến result
                 result = [];
+                //Tách chuỗi thành các kết quả mong muốn
+                let kq = [];
                 for(let i = 0; i < 3; i++){
-                    result.push(predictions[i].className);
+                    kq.push(predictions[i].className.split(","));
                 }
+                //Tách mảng thì các chuỗi keyword
+                result = [].concat.apply([], kq);
+                console.log(result);
             }
         }
-   });
+    });
 }
 
 module.exports = {

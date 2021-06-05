@@ -5,7 +5,7 @@ const mobilenet = require('@tensorflow-models/mobilenet');
 // for getting the data images
 var image = require('get-image-data')
 
-image('http://vuonhoalan.net/upload/ABC/image/Bulbophyllum/arcuatilabium.jpg', async function (err, image) {
+image('https://bluenanta.com/static/utils/images/species/spc_000075286_000113257.jpg', async function (err, image) {
 
     const numChannels = 3;
     const numPixels = image.width * image.height;
@@ -30,4 +30,13 @@ async function load(img){
 
     console.log('Predictions: ');
     console.log(predictions);
+    let kq = [];
+    for(let i = 0; i < 3; i++){
+        kq.push(predictions[i].className.split(","));
+    }
+    var merged = [].concat.apply([], kq);
+    for(i = 0; i < merged.length; i++){
+        merged[i].trim();
+    }
+    console.log(merged);
 }
