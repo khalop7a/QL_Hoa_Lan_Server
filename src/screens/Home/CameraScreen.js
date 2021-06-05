@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { 
   StyleSheet, 
   Text, 
@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import { RNCamera } from 'react-native-camera';
-import axios from 'axios';
+
 
 const CameraScreen = ({navigation}) => {
 
@@ -14,36 +14,10 @@ const CameraScreen = ({navigation}) => {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      //Get dữ liệu
-      const datum = new FormData();
-      datum.append('name', 'avatar');
-      datum.append('fileData', {
-        uri : data.uri,
-        type: "image/jpeg",
-        name: data.uri.substring(data.uri.lastIndexOf("/") + 1, data.uri.length)
-      });
-      const config = {
-        method: 'POST',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-        },
-        body: datum,
-      };
-      //POST hình lên Server 
-      await fetch("http://192.168.1.16:8080/api/" + "upload", config)
-      .then((response) => {
-
-      })
-      .catch((error) => {
-          console.error(error);
-      });
-      //Chờ kết quả phản hồi
-      const res = await axios.get('http://192.168.1.16:8080/api/download');
-      console.log(res.data)
-        // navigation.navigate('CameraDetailScreen', {
-        //   uri: data.uri,
-        // });
+      //Điều hướng
+      navigation.navigate('CameraDetailScreen', {
+        uri: data.uri,
+      });   
       }
   };
 
@@ -72,10 +46,10 @@ const CameraScreen = ({navigation}) => {
             //console.log(barcodes);
           }}
         />
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>          
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
             <Text style={{ fontSize: 14 }}> SCAN </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>  
         </View> 
       </View>
       )

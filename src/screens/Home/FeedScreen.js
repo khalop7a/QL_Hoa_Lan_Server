@@ -47,7 +47,7 @@ const FeedScreen = ({navigation}) => {
     const _isMounted = useRef(true);
 
     useEffect(() => {
-        fetch('https://orchid-server.herokuapp.com/api/orchids')
+        fetch('https://orchidapp.herokuapp.com/api/orchids')
         .then((response) => response.json())
         .then((responseJson) => {
             setImagesData(responseJson);

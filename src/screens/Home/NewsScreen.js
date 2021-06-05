@@ -50,7 +50,7 @@ const NewsScreen = ({navigation}) => {
     const _isMounted = useRef(true);
 
     useEffect(() => {
-        fetch('https://orchid-server.herokuapp.com/api/feeds')
+        fetch('https://orchidapp.herokuapp.com/api/feeds')
         .then((response) => response.json())
         .then((responseJson) => {
             setData(responseJson);

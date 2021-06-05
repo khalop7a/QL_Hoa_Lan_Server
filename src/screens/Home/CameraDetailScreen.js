@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {BackButton} from '../../components';
+import axios from 'axios';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -36,28 +37,71 @@ const CameraDetailScreen = ({route, navigation}) => {
           />
         );
     };
-
-    useEffect(() => {
+//------------AI----------------//
+    useEffect(async () => {
+        let ok = false;
         let result = [];
-        setTimeout(()=>{
-            fetch('https://orchid-server.herokuapp.com/api/orchids')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                setLoading(false);
-                let check = Math.floor(Math.random() * 10); 
-                if(check < 6){
-                    setFlag(false);
+        let kq = [];
+        let data = [];
+        //Get dữ liệu
+        const datum = new FormData();
+        datum.append('name', 'avatar');
+        datum.append('fileData', {
+            uri : uri,
+            type: "image/jpeg", //Chỉ cho phép upload ảnh JPG
+            name: uri.substring(uri.lastIndexOf("/") + 1, uri.length)
+        });
+        //Gửi dữ liệu đi
+        const config = {
+            method: 'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+            },
+            body: datum,
+        };
+        //POST hình lên Server 
+        await fetch("http://192.168.1.16:8080/api/" + "upload", config)
+        .then((response) => {
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        //Chờ kết quả phản hồi và nhận dữ liệu trả về từ Server
+        const res = await axios.get('http://192.168.1.16:8080/api/download');
+        //Test kết quả
+        console.log(res.data)  
+        //-----------TIỀN XỬ LÝ DỮ LIỆU-----------------
+        res.data.forEach(element => {
+            //Tách từng chữ
+            kq.push(element.split(" "));
+        })
+        //Tách mảng thì các chuỗi keyword
+        data = [].concat.apply([], kq);
+        //Xóa trắng thừa
+        data = data.filter(function(str) {
+            return /\S/.test(str);
+        });
+        console.log(data);
+        await fetch('https://orchidapp.herokuapp.com/api/orchids')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            setLoading(false);          
+            data.forEach(element => {
+                for(let j = 0; j < responseJson.length; j++)          
+                if(responseJson[j].science_name.toUpperCase().indexOf(element.toUpperCase()) !== -1){
+                    ok = true;
+                    result.push(responseJson[j]);
                 }
-                for(let i = 0; i < 3; i++){
-                    let index = Math.floor(Math.random() * responseJson.length);
-                    result.push(responseJson[index]);
-                }
-                setImagesData(result);
-            })
-            .catch((error) => {
-                console.error(error);
             });
-        }, 3000);  
+            if (ok) setFlag(false);
+            setImagesData(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+      
         return () => { _isMounted.current = false; };
     }, [])
 

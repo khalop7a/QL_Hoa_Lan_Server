@@ -48,7 +48,7 @@ const DetailScreen = ({route, navigation}) => {
     }
 
     const onPress = async () => {    
-        const res = await axios.get('https://orchid-server.herokuapp.com/api/user/' + user);   
+        const res = await axios.get('https://orchidapp.herokuapp.com/api/user/' + user);   
         favourite = res.data.favourite;
         setLoading(true);
         if(checkID()){
@@ -63,7 +63,7 @@ const DetailScreen = ({route, navigation}) => {
         }
         else{
             favourite.push(orchid_id);
-            const res = await axios.put('https://orchid-server.herokuapp.com/api/user/update/' + user, {
+            const res = await axios.put('https://orchidapp.herokuapp.com/api/user/update/' + user, {
                 "favourite": favourite
             }).then(resp => {
                 setLoading(false);

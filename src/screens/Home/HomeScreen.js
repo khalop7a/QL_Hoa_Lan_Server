@@ -38,7 +38,7 @@ const HomeScreen = ({navigation}) => {
     }, []);
 
     useEffect(() => {
-      fetch('https://orchid-server.herokuapp.com/api/slides')
+      fetch('https://orchidapp.herokuapp.com/api/slides')
       .then((response) => response.json())
       .then((responseJson) => {
           setData(responseJson);
