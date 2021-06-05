@@ -61,7 +61,7 @@ const CameraDetailScreen = ({route, navigation}) => {
             body: datum,
         };
         //POST hình lên Server 
-        await fetch("http://192.168.1.16:8080/api/" + "upload", config)
+        await fetch("https://orchidapp.herokuapp.com/api/" + "upload", config)
         .then((response) => {
 
         })
@@ -69,7 +69,7 @@ const CameraDetailScreen = ({route, navigation}) => {
             console.error(error);
         });
         //Chờ kết quả phản hồi và nhận dữ liệu trả về từ Server
-        const res = await axios.get('http://192.168.1.16:8080/api/download');
+        const res = await axios.get('https://orchidapp.herokuapp.com/api/download');
         //Test kết quả
         console.log(res.data)  
         //-----------TIỀN XỬ LÝ DỮ LIỆU-----------------
