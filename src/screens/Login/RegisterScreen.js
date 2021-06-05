@@ -24,8 +24,9 @@ const RegisterScreen = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState({value: '', error: ''})
     const [loading, setLoading] = useState(false);
 
-    _storeData = async (displayName) => {
+    _storeData = async (displayName, uid) => {
         try {
+            await AsyncStorage.setItem('uid-key', JSON.stringify(uid));
             await AsyncStorage.setItem('email-key', JSON.stringify(email.value));
             await AsyncStorage.setItem('passwork-key', JSON.stringify(password.value));
             await AsyncStorage.setItem('displayName-key', JSON.stringify(displayName));
@@ -64,7 +65,7 @@ const RegisterScreen = ({ navigation }) => {
                         displayName: name.value,
                         favourite: [],
                     };
-                    _storeData(name.value);
+                    _storeData(name.value, uid);
                     const usersRef = firebase.firestore().collection('users')  
                     usersRef.doc(uid).get()
                     .then(documentSnapshot => {
@@ -72,11 +73,11 @@ const RegisterScreen = ({ navigation }) => {
                             usersRef
                             .doc(uid)
                             .set(data)
-                            .then(() => {                                           
+                            .then(async () => {      
                                 navigation.reset({
                                     index: 0,
                                     routes: [{name: 'HomeStackScreen'}]
-                                })
+                                })                                                      
                             })
                             .catch((error) => {
                                 setLoading(false);

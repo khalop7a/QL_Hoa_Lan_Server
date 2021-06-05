@@ -10,7 +10,9 @@ const MyYardScreen = ({navigation}) => {
     const [favourite, setFavourite] = useState([]);
     const [favourite_id, setFavourite_id] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [count, setCount] = useState(0);
     let uid = "";
+
     const onPress = () => {
         navigation.navigate("Feed");
     }
@@ -23,17 +25,21 @@ const MyYardScreen = ({navigation}) => {
                 const value = await AsyncStorage.getItem('uid-key');
                 const res = value.split('"');
                 uid = res[1];
+                
             } catch (error) {
                 console.log(error)
             }
-            await axios.get('https://orchid-server.herokuapp.com/api/user/' + uid)
-            .then(response => {
-                datum = response.data.favourite;
+            await fetch('https://orchidapp.herokuapp.com/api/user/' + uid)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                datum = responseJson.favourite;
                 setFavourite_id(datum);
             })
-            .catch(error => console.log(error));
-            
-            await axios.get('https://orchid-server.herokuapp.com/api/orchids')
+            .catch((error) => {
+                console.error(error);
+            });
+             
+            await axios.get('https://orchidapp.herokuapp.com/api/orchids')
             .then(response => {
                 for(i = 0; i < response.data.length; i++){
                     for(var j = 0; j < datum.length; j++ ){
@@ -58,9 +64,13 @@ const MyYardScreen = ({navigation}) => {
         } catch (error) {
             console.log(error)
         }
-        await axios.put('https://orchid-server.herokuapp.com/api/user/update/' + uid, {
+        if(count !== 0)
+        {
+            await axios.put('https://orchidapp.herokuapp.com/api/user/update/' + uid, {
             "favourite": favourite_id
-        });
+            });
+        }   
+        setCount(count + 1);
      }, [favourite_id]);
 
     return (

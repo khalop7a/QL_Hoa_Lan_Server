@@ -34,66 +34,64 @@ const LoginScreen = ({ navigation }) => {
     };    
 
     const onLoginPressed = async () => {
-        // const emailError = emailValidator(email.value);
-        // const passwordError = passwordValidator(password.value);
-        // Keyboard.dismiss();
-        // setisSigningIn(true);
-        // if (emailError || passwordError) {           
-        //     setEmail({ ...email, error: emailError });
-        //     setPassword({ ...password, error: passwordError });
-        //     setisSigningIn(false);
-        //     return;
-        // }
-        // await firebase
-        //         .auth()
-        //         .signInWithEmailAndPassword(email.value, password.value)
-        //         .then((response) => {
-        //             const uid = response.user.uid
-        //             const usersRef = firebase.firestore().collection('users')
-        //             usersRef
-        //                 .doc(uid)
-        //                 .get()
-        //                 .then(firestoreDocument => {
-        //                     if (!firestoreDocument.exists) {
-        //                         Alert.alert("Lỗi", "Tài khoản này không tồn tại",
-        //                             [
-        //                                 {text: 'OK', onPress: () => {}, style: 'cancel' },
-        //                             ],
-        //                             { cancelable: true}
-        //                         )
-        //                         //alert("User does not exist anymore.")
-        //                         //setisSigningIn(false);
-        //                         return;
-        //                     }
-        //                     //Thêm vào Local Storage
-        //                     _storeData(response.user.displayName, uid);
-        //                     navigation.reset({
-        //                         index: 0,
-        //                         routes: [{ name: 'HomeStackScreen' }],
-        //                     })
-        //                 })
-        //                 .catch(error => {
-        //                     Alert.alert("Lỗi", "Mật khẩu chưa đúng",
-        //                         [
-        //                             {text: 'OK', onPress: () => {}, style: 'cancel' },
-        //                         ],
-        //                         { cancelable: true}
-        //                     )
-        //             });
-        //         })
-        //         .catch(error => {
-        //             Alert.alert("Lỗi", "Sai tên đăng nhập hoặc mật khẩu",
-        //                 [
-        //                     {text: 'OK', onPress: () => {}, style: 'cancel' },
-        //                 ],
-        //                 { cancelable: true}
-        //             )
-        //         })      
-        // setisSigningIn(false);
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeStackScreen' }],
-        })
+        const emailError = emailValidator(email.value);
+        const passwordError = passwordValidator(password.value);
+        Keyboard.dismiss();
+        setisSigningIn(true);
+        if (emailError || passwordError) {           
+            setEmail({ ...email, error: emailError });
+            setPassword({ ...password, error: passwordError });
+            setisSigningIn(false);
+            return;
+        }
+        await firebase
+                .auth()
+                .signInWithEmailAndPassword(email.value, password.value)
+                .then((response) => {
+                    const uid = response.user.uid
+                    const usersRef = firebase.firestore().collection('users')
+                    usersRef
+                        .doc(uid)
+                        .get()
+                        .then(firestoreDocument => {
+                            if (!firestoreDocument.exists) {
+                                Alert.alert("Lỗi", "Tài khoản này không tồn tại",
+                                    [
+                                        {text: 'OK', onPress: () => {}, style: 'cancel' },
+                                    ],
+                                    { cancelable: true}
+                                )
+                                return;
+                            }
+                            //Thêm vào Local Storage
+                            _storeData(response.user.displayName, uid);
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'HomeStackScreen' }],
+                            })
+                        })
+                        .catch(error => {
+                            Alert.alert("Lỗi", "Mật khẩu chưa đúng",
+                                [
+                                    {text: 'OK', onPress: () => {}, style: 'cancel' },
+                                ],
+                                { cancelable: true}
+                            )
+                    });
+                })
+                .catch(error => {
+                    Alert.alert("Lỗi", "Sai tên đăng nhập hoặc mật khẩu",
+                        [
+                            {text: 'OK', onPress: () => {}, style: 'cancel' },
+                        ],
+                        { cancelable: true}
+                    )
+                })      
+        setisSigningIn(false);
+        // navigation.reset({
+        //     index: 0,
+        //     routes: [{ name: 'HomeStackScreen' }],
+        // })
     }
 
     return (   
